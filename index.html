@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng tính lượng nước thông rửa ống</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; padding: 10px; }
+        .header { background-color: #0070c0; color: white; text-align: center; font-weight: bold; padding: 10px; font-size: 18px; }
+        .row { display: flex; border-bottom: 1px solid #ccc; }
+        .label { background-color: #0070c0; color: white; flex: 2; padding: 8px; font-size: 14px; }
+        .input-cell { flex: 1; padding: 5px; background-color: #e6f2ff; display: flex; align-items: center; }
+        input, select { width: 100%; padding: 6px; box-sizing: border-box; text-align: right; font-weight: bold; }
+        .section-title { background-color: #ffff00; color: black; font-weight: bold; text-align: center; padding: 8px; margin-top: 5px; }
+        .result-red { background-color: #ff0000; color: white; text-align: right; font-weight: bold; padding: 8px; margin-bottom: 2px; }
+        .result-blue { background-color: #e6f2ff; text-align: right; font-weight: bold; padding: 8px; }
+        .total-box { background-color: #ffff00; color: #0070c0; text-align: center; font-weight: bold; padding: 15px; font-size: 20px; border: 2px solid #0070c0; }
+    </style>
+</head>
+<body>
+
+<div class="header">BẢNG TÍNH LƯỢNG NƯỚC THÔNG RỬA ỐNG</div>
+
+<div class="row">
+    <div class="label">Đường kính ống (mm)</div>
+    <div class="input-cell"><input type="number" id="diameter" value="110" oninput="calculate()"></div>
+</div>
+<div class="row">
+    <div class="label">Vật liệu đường ống</div>
+    <div class="input-cell">
+        <select id="material">
+            <option value="HDPE">HDPE</option>
+            <option value="uPVC">uPVC</option>
+            <option value="DI">Gang cầu (DI)</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="label">Chiều dài đường ống (m)</div>
+    <div class="input-cell"><input type="number" id="length" value="350" oninput="calculate()"></div>
+</div>
+<div class="row">
+    <div class="label">Áp lực nước điểm đầu (m)</div>
+    <div class="input-cell"><input type="number" id="pStart" value="20" oninput="calculate()"></div>
+</div>
+<div class="row">
+    <div class="label">Áp lực nước điểm cuối (m)</div>
+    <div class="input-cell"><input type="number" id="pEnd" value="0" oninput="calculate()"></div>
+</div>
+<div class="row">
+    <div class="label">Thời gian thông rửa (phút)</div>
+    <div class="input-cell"><input type="number" id="time" value="10" oninput="calculate()"></div>
+</div>
+<div class="row">
+    <div class="label">Số thông rửa ống (lần)</div>
+    <div class="input-cell"><input type="number" id="runs" value="1" oninput="calculate()"></div>
+</div>
+
+<div class="section-title">KẾT QUẢ</div>
+
+<div class="row">
+    <div class="label" style="display:flex; align-items:center;">Lưu lượng thông rửa</div>
+    <div style="flex:1;">
+        <div class="result-red" id="q_m3s">0.0207</div>
+        <div class="result-red" id="q_m3min">1.24</div>
+        <div class="result-red" id="q_m3h">74.34</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="label">Lượng nước có sẵn trong đường ống (m³)</div>
+    <div class="result-blue" style="flex:1;" id="v_pipe">3.33</div>
+</div>
+
+<div class="section-title">Lượng nước thất thoát<br>(Q<sub>thông rửa</sub> + Q<sub>ống</sub>)</div>
+<div class="total-box" id="v_total">15.72</div>
+
+<script>
+function calculate() {
+    // 1. Lấy dữ liệu đầu vào
+    let d = parseFloat(document.getElementById('diameter').value) || 0; // mm
+    let L = parseFloat(document.getElementById('length').value) || 0;   // m
+    let pStart = parseFloat(document.getElementById('pStart').value) || 0;
+    let pEnd = parseFloat(document.getElementById('pEnd').value) || 0;
+    let t = parseFloat(document.getElementById('time').value) || 0;     // phút
+    let n = parseFloat(document.getElementById('runs').value) || 0;     // lần
+
+    // 2. Công thức tính toán (Thay thế công thức thủy lực thực tế của anh vào đây)
+    // Ví dụ tính thể tích nước chứa sẵn trong ống V_pipe = pi * (d/2000)^2 * L
+    let v_pipe = Math.PI * Math.pow(d / 2000, 2) * L;
+    
+    // Giả định lưu lượng q (m3/s) theo áp lực/đường kính (thay công thức Torricelli/Hazen-Williams...)
+    let q_m3s = 0.0207; // Thay bằng công thức tính q thực tế
+    let q_m3min = q_m3s * 60;
+    let q_m3h = q_m3s * 3600;
+
+    // Tổng lượng nước thất thoát = (Lưu lượng/phút * số phút * số lần) + Thể tích ống
+    let v_total = (q_m3min * t * n) + v_pipe;
+
+    // 3. Hiển thị kết quả
+    document.getElementById('q_m3s').innerText = q_m3s.toFixed(4);
+    document.getElementById('q_m3min').innerText = q_m3min.toFixed(2);
+    document.getElementById('q_m3h').innerText = q_m3h.toFixed(2);
+    document.getElementById('v_pipe').innerText = v_pipe.toFixed(2);
+    document.getElementById('v_total').innerText = v_total.toFixed(2);
+}
+
+// Chạy tính toán lần đầu
+calculate();
+</script>
+
+</body>
+</html>
