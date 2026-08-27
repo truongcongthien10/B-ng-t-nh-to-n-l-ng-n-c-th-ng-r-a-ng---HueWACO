@@ -44,6 +44,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             overflow: hidden;
             border: 1px solid var(--border-color);
+            position: relative;
         }
 
         .header-bar {
@@ -58,7 +59,7 @@
         }
 
         .content {
-            padding: 12px 15px;
+            padding: 12px 15px 35px 15px; /* Thêm padding dưới để không đè lên footer */
         }
 
         .section-title {
@@ -202,15 +203,9 @@
             font-size: 0.9rem;
         }
 
-        .highlight-m3s {
+        .highlight-unit {
             color: var(--highlight-orange);
             font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        .highlight-m3h {
-            color: var(--highlight-orange);
-            font-size: 1rem;
             font-weight: 700;
         }
 
@@ -218,6 +213,17 @@
             color: var(--excel-header-bg);
             font-size: 1.05rem;
             font-weight: 800;
+        }
+
+        /* Footer Copyright ở góc trái dưới cùng */
+        .footer-copyright {
+            padding: 8px 15px;
+            font-size: 0.72rem;
+            color: #666666;
+            font-weight: 600;
+            text-align: left;
+            background-color: #f8faf8;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -272,22 +278,15 @@
 
         <button class="btn-calc" onclick="calculateFlushing()">Tính Toán Thông Rửa</button>
 
-        <div class="section-title">II. Kết Quả Thủy Lực Dòng Chảy</div>
+        <div class="section-title">II. LƯỢNG NƯỚC THÔNG RỬA</div>
         <div class="result-box">
             <div class="result-item">
-                <span class="result-label">Lưu lượng qua đường ống (Q):</span>
+                <span class="result-label">Lượng nước thông rửa:</span>
                 <div class="result-value-group">
-                    <span id="res_q_m3s" class="highlight-m3s">- m³/s</span>
-                    <span id="res_q_m3h" class="highlight-m3h">- m³/h</span>
+                    <span id="res_q_m3s" class="highlight-unit">- m³/s</span>
+                    <span id="res_q_m3p" class="highlight-unit">- m³/p</span>
+                    <span id="res_q_m3h" class="highlight-unit">- m³/h</span>
                 </div>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Vận tốc trong đường ống (v):</span>
-                <span class="result-value" id="res_v">- m/s</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Tổn thất thủy lực (toàn tuyến):</span>
-                <span class="result-value" id="res_hf">- m</span>
             </div>
         </div>
 
@@ -302,6 +301,10 @@
                 <span class="total-highlight" id="res_total_vol">- m³</span>
             </div>
         </div>
+    </div>
+
+    <div class="footer-copyright">
+        © PHÒNG KỸ THUẬT - HueWACO
     </div>
 </div>
 
@@ -319,9 +322,8 @@
 
         if (dMm <= 0 || L <= 0 || deltaH <= 0) {
             document.getElementById('res_q_m3s').innerText = "- m³/s";
+            document.getElementById('res_q_m3p').innerText = "- m³/p";
             document.getElementById('res_q_m3h').innerText = "Không hợp lệ";
-            document.getElementById('res_v').innerText = "- m/s";
-            document.getElementById('res_hf').innerText = "- m";
             document.getElementById('res_pipe_vol').innerText = "- m³";
             document.getElementById('res_total_vol').innerText = "- m³";
             return;
@@ -331,13 +333,8 @@
 
         // Công thức Hazen-Williams tính Q (m³/s)
         const qM3s = 0.2785 * C * Math.pow(dM, 2.63) * Math.pow(deltaH / L, 0.54);
-        const qM3h = qM3s * 3600;
-
-        // Vận tốc v (m/s)
-        const v = (4 * qM3s) / (Math.PI * Math.pow(dM, 2));
-
-        // Tổn thất thủy lực Hf (m)
-        const hf = (11.737 * L * Math.pow(qM3s, 1.852)) / (Math.pow(C, 1.852) * Math.pow(dM, 4.87));
+        const qM3p = qM3s * 60;   // m³/phút
+        const qM3h = qM3s * 3600; // m³/giờ
 
         // Lượng nước có sẵn trong ống (giả định điền đầy 70%)
         const pipeVol = ((Math.PI * Math.pow(dM, 2)) / 4) * L * 0.70;
@@ -347,9 +344,8 @@
         const totalVol = flushVol + pipeVol;
 
         document.getElementById('res_q_m3s').innerText = qM3s.toFixed(6) + " m³/s";
+        document.getElementById('res_q_m3p').innerText = qM3p.toFixed(3) + " m³/p";
         document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h";
-        document.getElementById('res_v').innerText = v.toFixed(3) + " m/s";
-        document.getElementById('res_hf').innerText = hf.toFixed(2) + " m";
         document.getElementById('res_pipe_vol').innerText = pipeVol.toFixed(2) + " m³";
         document.getElementById('res_total_vol').innerText = totalVol.toFixed(2) + " m³";
     }
