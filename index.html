@@ -59,7 +59,7 @@
         }
 
         .content {
-            padding: 12px 15px 35px 15px; /* Thêm padding dưới để không đè lên footer */
+            padding: 12px 15px 35px 15px;
         }
 
         .section-title {
@@ -125,7 +125,7 @@
             transition: all 0.2s ease-in-out;
         }
 
-        /* Chỉ ô được chọn (:focus) mới đổi sang shade vàng nhạt và nổi nhẹ */
+        /* Chỉ ô được chọn (:focus) mới đổi sang shade vàng nhạt */
         input:focus, select:focus {
             background-color: var(--focus-yellow-bg);
             border-color: var(--focus-yellow-border);
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
         }
 
-        /* Nút tính toán 3D đồng bộ màu xanh lá */
+        /* Nút tính toán 3D */
         .btn-calc {
             width: 100%;
             background: linear-gradient(135deg, #107c41 0%, #0b592e 100%);
@@ -168,7 +168,7 @@
             background-color: var(--result-bg);
             border: 1px solid #c3e6c5;
             border-left: 4px solid var(--excel-header-bg);
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 4px;
         }
 
@@ -190,11 +190,12 @@
             font-weight: 600;
         }
 
+        /* Dãn cách các dòng kết quả */
         .result-value-group {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 2px;
+            gap: 6px;
         }
 
         .result-value {
@@ -303,8 +304,9 @@
         </div>
     </div>
 
+    <!-- Đã bổ sung chữ Copyright -->
     <div class="footer-copyright">
-        © PHÒNG KỸ THUẬT - HueWACO
+        © Copyright PHÒNG KỸ THUẬT - HueWACO
     </div>
 </div>
 
@@ -343,9 +345,10 @@
         const flushVol = qM3h * (flushTime / 60) * flushCount;
         const totalVol = flushVol + pipeVol;
 
-        document.getElementById('res_q_m3s').innerText = qM3s.toFixed(6) + " m³/s";
-        document.getElementById('res_q_m3p').innerText = qM3p.toFixed(3) + " m³/p";
-        document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h";
+        /* Định dạng làm tròn số */
+        document.getElementById('res_q_m3s').innerText = qM3s.toFixed(4) + " m³/s"; // 4 số thập phân
+        document.getElementById('res_q_m3p').innerText = qM3p.toFixed(2) + " m³/p"; // 2 số thập phân
+        document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h"; // 2 số thập phân
         document.getElementById('res_pipe_vol').innerText = pipeVol.toFixed(2) + " m³";
         document.getElementById('res_total_vol').innerText = totalVol.toFixed(2) + " m³";
     }
