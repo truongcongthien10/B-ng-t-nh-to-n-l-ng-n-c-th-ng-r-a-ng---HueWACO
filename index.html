@@ -18,7 +18,7 @@
             --result-bg: #eef7ee;
             --highlight-orange: #d83b01;
 
-            /* Tone màu shade vàng rất nhạt và dịu mắt */
+            /* Tone màu shade vàng nhạt */
             --focus-yellow-bg: #fffde6;
             --focus-yellow-border: #e6b800;
         }
@@ -58,18 +58,20 @@
             text-transform: uppercase;
         }
 
+        /* Chỉnh lại padding dưới của content để cân bằng với footer */
         .content {
-            padding: 12px 15px 35px 15px;
+            padding: 12px 15px 15px 15px;
         }
 
+        /* Cân bằng khoảng cách đều đặn cho tất cả Tiêu đề Mục */
         .section-title {
             font-weight: 700;
             color: var(--section-title);
             background-color: var(--section-bg);
             border-bottom: 2px solid var(--excel-header-bg);
             padding: 6px 10px;
-            margin-top: 12px;
-            margin-bottom: 10px;
+            margin-top: 14px;
+            margin-bottom: 8px;
             font-size: 0.92rem;
             text-transform: uppercase;
             border-radius: 4px 4px 0 0;
@@ -131,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
         }
 
-        /* Thể hiện đường kính trong ID bên dưới dropdown chọn DN */
+        /* Khung hiển thị đường kính trong ID */
         .id-display-info {
             font-size: 0.78rem;
             color: #107c41;
@@ -155,7 +157,7 @@
             border-radius: 6px;
             cursor: pointer;
             margin-top: 14px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             box-shadow: 0 5px 0 #07331a, 0 8px 12px rgba(0,0,0,0.25);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -174,11 +176,12 @@
             box-shadow: 0 2px 0 #07331a, 0 4px 6px rgba(0,0,0,0.2);
         }
 
+        /* Chuẩn hóa padding khung kết quả */
         .result-box {
             background-color: var(--result-bg);
             border: 1px solid #c3e6c5;
             border-left: 4px solid var(--excel-header-bg);
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-radius: 4px;
         }
 
@@ -204,7 +207,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
         }
 
         .result-value {
@@ -226,7 +229,7 @@
         }
 
         .footer-copyright {
-            padding: 8px 15px;
+            padding: 10px 15px;
             font-size: 0.72rem;
             color: #666666;
             font-weight: 600;
@@ -276,7 +279,6 @@
             <div class="form-group">
                 <label for="dnSelect">Đường kính ống (DN):</label>
                 <select id="dnSelect" onchange="onDNChange()">
-                    <!-- Tự động đổ danh mục theo vật liệu -->
                 </select>
                 <div class="id-display-info" id="idDisplay">Đường kính trong (ID): - mm</div>
             </div>
@@ -336,7 +338,6 @@
 </div>
 
 <script>
-    // Cơ sở dữ liệu đường ống tiêu chuẩn đầy đủ
     const PIPE_DB = {
         hdpe: {
             c: 140,
@@ -400,7 +401,6 @@
                 opt.value = idx;
                 opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
                 
-                // Mặc định chọn DN110 nếu có
                 if (dn === 110 || dn === '110') {
                     opt.selected = true;
                     defaultIndex = idx;
@@ -451,22 +451,17 @@
             return;
         }
 
-        // Đổi đường kính trong (ID) từ mm sang mét để tính toán
         const idMeter = currentID / 1000;
 
-        // 1. Công thức Hazen-Williams tính Q (m³/s) dùng đường kính trong ID
         const qM3s = 0.2785 * currentC * Math.pow(idMeter, 2.63) * Math.pow(deltaH / L, 0.54);
-        const qM3p = qM3s * 60;   // m³/phút
-        const qM3h = qM3s * 3600; // m³/giờ
+        const qM3p = qM3s * 60;
+        const qM3h = qM3s * 3600;
 
-        // 2. Lượng nước có sẵn trong ống tính theo ID (giả định điền đầy 70%)
         const pipeVol = ((Math.PI * Math.pow(idMeter, 2)) / 4) * L * 0.70;
 
-        // 3. Tổng lượng nước thông rửa
         const flushVol = qM3h * (flushTime / 60) * flushCount;
         const totalVol = flushVol + pipeVol;
 
-        /* Xuất kết quả */
         document.getElementById('res_q_m3s').innerText = qM3s.toFixed(4) + " m³/s";
         document.getElementById('res_q_m3p').innerText = qM3p.toFixed(2) + " m³/p";
         document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h";
