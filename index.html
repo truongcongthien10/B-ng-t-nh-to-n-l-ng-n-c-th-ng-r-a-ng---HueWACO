@@ -103,7 +103,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Xóa nút tăng giảm số */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -125,7 +124,6 @@
             transition: all 0.2s ease-in-out;
         }
 
-        /* Chỉ ô được chọn (:focus) mới đổi sang shade vàng nhạt */
         input:focus, select:focus {
             background-color: var(--focus-yellow-bg);
             border-color: var(--focus-yellow-border);
@@ -133,7 +131,19 @@
             box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
         }
 
-        /* Nút tính toán 3D */
+        /* Thể hiện đường kính trong ID bên dưới dropdown chọn DN */
+        .id-display-info {
+            font-size: 0.78rem;
+            color: #107c41;
+            font-weight: 700;
+            margin-top: 3px;
+            background-color: #f0f7f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px dashed #b2d8b4;
+            display: inline-block;
+        }
+
         .btn-calc {
             width: 100%;
             background: linear-gradient(135deg, #107c41 0%, #0b592e 100%);
@@ -190,7 +200,6 @@
             font-weight: 600;
         }
 
-        /* Dãn cách các dòng kết quả */
         .result-value-group {
             display: flex;
             flex-direction: column;
@@ -216,7 +225,6 @@
             font-weight: 800;
         }
 
-        /* Footer Copyright ở góc trái dưới cùng */
         .footer-copyright {
             padding: 8px 15px;
             font-size: 0.72rem;
@@ -234,12 +242,45 @@
     <div class="header-bar">BẢNG TÍNH LƯỢNG NƯỚC THÔNG RỬA ỐNG - 2026</div>
     
     <div class="content">
-        <div class="section-title">I. Thông Số Đầu Vào</div>
+        <div class="section-title">I. THÔNG SỐ ĐẦU VÀO</div>
+        
+        <div class="form-group" style="margin-bottom: 10px;">
+            <label for="materialSelect">Vật liệu & Cấp áp lực đường ống:</label>
+            <select id="materialSelect" onchange="onMaterialChange()">
+                <optgroup label="Ống HDPE (C = 140)">
+                    <option value="hdpe_pn10" selected>HDPE PN10 (SDR17)</option>
+                    <option value="hdpe_pn12.5">HDPE PN12.5 (SDR13.6)</option>
+                    <option value="hdpe_pn16">HDPE PN16 (SDR11)</option>
+                    <option value="hdpe_pn20">HDPE PN20 (SDR9)</option>
+                </optgroup>
+                <optgroup label="Ống uPVC (C = 140)">
+                    <option value="pvc_pn6">uPVC PN6</option>
+                    <option value="pvc_pn8">uPVC PN8</option>
+                    <option value="pvc_pn10">uPVC PN10</option>
+                    <option value="pvc_pn12.5">uPVC PN12.5</option>
+                    <option value="pvc_pn16">uPVC PN16</option>
+                </optgroup>
+                <optgroup label="Ống Gang Dẻo (C = 130)">
+                    <option value="ductile_pn10">Gang Dẻo PN10 (Class C25/C30)</option>
+                    <option value="ductile_pn16">Gang Dẻo PN16 (Class C40)</option>
+                    <option value="ductile_k9">Gang Dẻo Class K9 (PN25)</option>
+                </optgroup>
+                <optgroup label="Ống Thép Cấp Nước (C = 120)">
+                    <option value="steel_std">Thép STD</option>
+                    <option value="steel_sch40">Thép SCH40</option>
+                </optgroup>
+            </select>
+        </div>
+
         <div class="form-grid">
             <div class="form-group">
-                <label for="d_mm">Đường kính ống (mm):</label>
-                <input type="number" id="d_mm" value="110" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
+                <label for="dnSelect">Đường kính ống (DN):</label>
+                <select id="dnSelect" onchange="onDNChange()">
+                    <!-- Tự động đổ danh mục theo vật liệu -->
+                </select>
+                <div class="id-display-info" id="idDisplay">Đường kính trong (ID): - mm</div>
             </div>
+            
             <div class="form-group">
                 <label for="length">Chiều dài đường ống (m):</label>
                 <input type="number" id="length" value="500" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
@@ -260,21 +301,6 @@
                 <label for="flush_count">Số lần thông rửa (lần):</label>
                 <input type="number" id="flush_count" value="1" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
             </div>
-            <div class="form-group" style="grid-column: span 2;">
-                <label for="material">Vật liệu đường ống:</label>
-                <select id="material" onchange="calculateFlushing()">
-                    <option value="140" selected>Ống HDPE (C = 140)</option>
-                    <option value="140">Ống PVC (C = 140)</option>
-                    <option value="140">Ống Inox (C = 140)</option>
-                    <option value="130">Ống gang dẻo mới (C = 130)</option>
-                    <option value="120">Ống gang dẻo phục hồi (C = 120)</option>
-                    <option value="120">Ống thép mới (C = 120)</option>
-                    <option value="110">Ống thép phục hồi (C = 110)</option>
-                    <option value="90">Ống thép cũ (C = 90)</option>
-                    <option value="110">Ống gang xám (C = 110)</option>
-                    <option value="110">Ống bê tông xi măng (C = 110)</option>
-                </select>
-            </div>
         </div>
 
         <button class="btn-calc" onclick="calculateFlushing()">Tính Toán Thông Rửa</button>
@@ -291,7 +317,7 @@
             </div>
         </div>
 
-        <div class="section-title">III. Thể Tích Nước Và Tổng Nước Thông Rửa</div>
+        <div class="section-title">III. THỂ TÍCH NƯỚC VÀ TỔNG NƯỚC THÔNG RỬA</div>
         <div class="result-box">
             <div class="result-item">
                 <span class="result-label">Nước có sẵn trong ống (70%):</span>
@@ -304,25 +330,119 @@
         </div>
     </div>
 
-    <!-- Đã bổ sung chữ Copyright -->
     <div class="footer-copyright">
         © Copyright PHÒNG KỸ THUẬT - HueWACO
     </div>
 </div>
 
 <script>
+    // Cơ sở dữ liệu đường ống tiêu chuẩn đầy đủ
+    const PIPE_DB = {
+        hdpe: {
+            c: 140,
+            dns: [25, 32, 40, 50, 63, 75, 90, 110, 160, 200, 225, 250, 280, 315, 355, 400, 450, 500, 630],
+            pns: {
+                "pn10":   [22.0, 28.2, 35.2, 44.0, 55.4, 66.0, 79.2, 96.8, 141.0, 176.2, 198.2, 220.4, 246.8, 277.6, 312.8, 352.6, 396.6, 440.6, 555.2],
+                "pn12.5": [21.2, 27.2, 34.0, 42.6, 53.6, 63.8, 76.6, 93.8, 136.4, 170.6, 191.8, 213.2, 238.8, 268.6, 302.8, 341.2, 383.8, 426.4, 537.4],
+                "pn16":   [20.4, 26.0, 32.6, 40.8, 51.4, 61.4, 73.6, 90.0, 130.8, 163.6, 184.0, 204.6, 229.2, 257.8, 290.6, 327.4, 368.2, 409.2, 515.6],
+                "pn20":   [19.4, 24.8, 31.0, 38.8, 48.8, 58.2, 69.8, 85.4, 124.2, 155.2, 174.6, 194.2, 217.4, 244.6, 275.6, 310.6, 349.4, 388.4, 489.4]
+            }
+        },
+        pvc: {
+            c: 140,
+            dns: [21, 27, 34, 42, 48, 60, 75, 90, 110, 125, 140, 160, 180, 200, 225, 250, 280, 315, 355, 400, 450],
+            pns: {
+                "pn6":    ["-", "-", "-", "-", "-", 57.0, 71.2, 85.6, 104.6, 118.8, 133.0, 152.2, 171.2, 190.2, 214.0, 237.6, 266.2, 299.6, 337.6, 380.4, 428.0],
+                "pn8":    ["-", "-", "-", "-", "-", 56.4, 70.4, 84.4, 103.2, 117.2, 131.4, 150.2, 169.0, 187.6, 211.2, 234.6, 262.8, 295.6, 333.2, 375.4, 422.4],
+                "pn10":   [18.6, 24.4, 31.0, 38.6, 44.2, 55.4, 69.2, 83.0, 101.6, 115.4, 129.2, 147.6, 166.2, 184.6, 207.8, 230.8, 258.6, 290.8, 327.8, 369.4, 415.6],
+                "pn12.5": [18.2, 23.8, 30.6, 38.0, 43.4, 54.2, 67.8, 81.4, 99.4, 113.0, 126.6, 144.6, 162.8, 180.8, 203.4, 226.2, 253.2, 285.0, 321.2, 361.8, 407.0],
+                "pn16":   [17.8, 23.4, 30.0, 37.0, 42.4, 52.8, 66.0, 79.2, 96.8, 110.2, 123.4, 141.0, 158.6, 176.2, 198.2, 220.4, 246.8, 277.6, 312.8, 352.6, 396.6]
+            }
+        },
+        ductile: {
+            c: 130,
+            dns: [80, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1200],
+            pns: {
+                "pn10": [78.6, 100.6, 152.6, 204.6, 256.0, 307.4, 407.0, 508.4, 610.0, 711.4, 812.0, 912.4, 1015.0, 1218.0],
+                "pn16": [78.4, 100.4, 151.8, 203.0, 254.0, 305.0, 404.0, 505.0, 606.0, 707.0, 807.0, 907.0, 1009.0, 1211.4],
+                "k9":   [76.0, 98.0, 150.0, 201.4, 252.4, 303.6, 402.8, 504.0, 605.2, 706.4, 806.6, 906.8, 1009.0, 1211.4]
+            }
+        },
+        steel: {
+            c: 120,
+            dns: ['DN50 (2")', 'DN80 (3")', 'DN100 (4")', 'DN150 (6")', 'DN200 (8")', 'DN250 (10")', 'DN300 (12")', 'DN400 (16")', 'DN500 (20")', 'DN600 (24")', 'DN700 (28")', 'DN800 (32")', 'DN900 (36")', 'DN1000 (40")', 'DN1100 (44")', 'DN1200 (48")'],
+            pns: {
+                "std":   [52.48, 77.92, 102.26, 154.08, 202.74, 254.46, 304.76, 387.36, 488.96, 590.94, 692.14, 793.74, 895.34, 996.94, 1098.54, 1200.14],
+                "sch40": [52.48, 77.92, 102.26, 154.08, 202.74, 254.46, 304.76, 387.36, 488.96, 575.04, 676.24, 777.84, 876.30, 977.90, 1079.50, 1181.10]
+            }
+        }
+    };
+
+    let currentID = 0;
+    let currentC = 140;
+
+    function onMaterialChange() {
+        const selectedVal = document.getElementById('materialSelect').value;
+        const [matGroup, pnSub] = selectedVal.split('_');
+        
+        const matData = PIPE_DB[matGroup];
+        currentC = matData.c;
+
+        const dnSelect = document.getElementById('dnSelect');
+        dnSelect.innerHTML = '';
+
+        const idList = matData.pns[pnSub];
+
+        let defaultIndex = -1;
+        matData.dns.forEach((dn, idx) => {
+            if (idList[idx] !== undefined && idList[idx] !== "-") {
+                let opt = document.createElement('option');
+                opt.value = idx;
+                opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
+                
+                // Mặc định chọn DN110 nếu có
+                if (dn === 110 || dn === '110') {
+                    opt.selected = true;
+                    defaultIndex = idx;
+                }
+                dnSelect.appendChild(opt);
+            }
+        });
+
+        if (defaultIndex === -1 && dnSelect.options.length > 0) {
+            dnSelect.selectedIndex = 0;
+        }
+
+        onDNChange();
+    }
+
+    function onDNChange() {
+        const selectedVal = document.getElementById('materialSelect').value;
+        const [matGroup, pnSub] = selectedVal.split('_');
+        const dnIndex = document.getElementById('dnSelect').value;
+
+        if (dnIndex !== null && dnIndex !== "") {
+            const idVal = PIPE_DB[matGroup].pns[pnSub][dnIndex];
+            currentID = parseFloat(idVal) || 0;
+            document.getElementById('idDisplay').innerText = `Đường kính trong (ID): ${currentID} mm`;
+        } else {
+            currentID = 0;
+            document.getElementById('idDisplay').innerText = `Đường kính trong (ID): - mm`;
+        }
+
+        calculateFlushing();
+    }
+
     function calculateFlushing() {
-        const dMm = parseFloat(document.getElementById('d_mm').value) || 0;
         const L = parseFloat(document.getElementById('length').value) || 0;
         const hHead = parseFloat(document.getElementById('h_head').value) || 0;
         const hTail = parseFloat(document.getElementById('h_tail').value) || 0;
         const flushTime = parseFloat(document.getElementById('flush_time').value) || 0;
         const flushCount = parseFloat(document.getElementById('flush_count').value) || 0;
-        const C = parseFloat(document.getElementById('material').value) || 140;
 
         const deltaH = hHead - hTail;
 
-        if (dMm <= 0 || L <= 0 || deltaH <= 0) {
+        if (currentID <= 0 || L <= 0 || deltaH <= 0) {
             document.getElementById('res_q_m3s').innerText = "- m³/s";
             document.getElementById('res_q_m3p').innerText = "- m³/p";
             document.getElementById('res_q_m3h').innerText = "Không hợp lệ";
@@ -331,29 +451,32 @@
             return;
         }
 
-        const dM = dMm / 1000;
+        // Đổi đường kính trong (ID) từ mm sang mét để tính toán
+        const idMeter = currentID / 1000;
 
-        // Công thức Hazen-Williams tính Q (m³/s)
-        const qM3s = 0.2785 * C * Math.pow(dM, 2.63) * Math.pow(deltaH / L, 0.54);
+        // 1. Công thức Hazen-Williams tính Q (m³/s) dùng đường kính trong ID
+        const qM3s = 0.2785 * currentC * Math.pow(idMeter, 2.63) * Math.pow(deltaH / L, 0.54);
         const qM3p = qM3s * 60;   // m³/phút
         const qM3h = qM3s * 3600; // m³/giờ
 
-        // Lượng nước có sẵn trong ống (giả định điền đầy 70%)
-        const pipeVol = ((Math.PI * Math.pow(dM, 2)) / 4) * L * 0.70;
+        // 2. Lượng nước có sẵn trong ống tính theo ID (giả định điền đầy 70%)
+        const pipeVol = ((Math.PI * Math.pow(idMeter, 2)) / 4) * L * 0.70;
 
-        // Tổng lượng nước thông rửa
+        // 3. Tổng lượng nước thông rửa
         const flushVol = qM3h * (flushTime / 60) * flushCount;
         const totalVol = flushVol + pipeVol;
 
-        /* Định dạng làm tròn số */
-        document.getElementById('res_q_m3s').innerText = qM3s.toFixed(4) + " m³/s"; // 4 số thập phân
-        document.getElementById('res_q_m3p').innerText = qM3p.toFixed(2) + " m³/p"; // 2 số thập phân
-        document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h"; // 2 số thập phân
+        /* Xuất kết quả */
+        document.getElementById('res_q_m3s').innerText = qM3s.toFixed(4) + " m³/s";
+        document.getElementById('res_q_m3p').innerText = qM3p.toFixed(2) + " m³/p";
+        document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h";
         document.getElementById('res_pipe_vol').innerText = pipeVol.toFixed(2) + " m³";
         document.getElementById('res_total_vol').innerText = totalVol.toFixed(2) + " m³";
     }
 
-    window.onload = calculateFlushing;
+    window.onload = function() {
+        onMaterialChange();
+    };
 </script>
 
 </body>
