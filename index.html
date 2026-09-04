@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tính Toán Thông Rửa Đường Ống - 2026</title>
+    <title>Tính Toán Thông Rửa Đường Ống - HueWACO</title>
     <style>
         :root {
             --excel-header-bg: #107c41;
@@ -17,17 +17,11 @@
             --accent-blue: #005a9e;
             --result-bg: #eef7ee;
             --highlight-orange: #d83b01;
-
-            /* Tone màu shade vàng nhạt */
             --focus-yellow-bg: #fffde6;
             --focus-yellow-border: #e6b800;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -58,12 +52,8 @@
             text-transform: uppercase;
         }
 
-        /* Chỉnh lại padding dưới của content để cân bằng với footer */
-        .content {
-            padding: 12px 15px 15px 15px;
-        }
+        .content { padding: 12px 15px 15px 15px; }
 
-        /* Cân bằng khoảng cách đều đặn cho tất cả Tiêu đề Mục */
         .section-title {
             font-weight: 700;
             color: var(--section-title);
@@ -84,16 +74,10 @@
         }
 
         @media (max-width: 480px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 6px;
-            }
+            .form-grid { grid-template-columns: 1fr; gap: 6px; }
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+        .form-group { display: flex; flex-direction: column; }
 
         label {
             font-size: 0.8rem;
@@ -105,14 +89,14 @@
             text-overflow: ellipsis;
         }
 
+        sub { font-size: 0.75em; vertical-align: sub; }
+
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
+        input[type="number"] { -moz-appearance: textfield; }
 
         input, select {
             padding: 6px 8px;
@@ -133,7 +117,6 @@
             box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
         }
 
-        /* Khung hiển thị đường kính trong ID */
         .id-display-info {
             font-size: 0.78rem;
             color: #107c41;
@@ -171,12 +154,6 @@
             box-shadow: 0 8px 0 #07331a, 0 12px 18px rgba(0,0,0,0.3);
         }
 
-        .btn-calc:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #07331a, 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        /* Chuẩn hóa padding khung kết quả */
         .result-box {
             background-color: var(--result-bg);
             border: 1px solid #c3e6c5;
@@ -194,14 +171,9 @@
             font-size: 0.85rem;
         }
 
-        .result-item:last-child {
-            border-bottom: none;
-        }
+        .result-item:last-child { border-bottom: none; }
 
-        .result-label {
-            color: #2e4d32;
-            font-weight: 600;
-        }
+        .result-label { color: #2e4d32; font-weight: 600; }
 
         .result-value-group {
             display: flex;
@@ -210,23 +182,9 @@
             gap: 4px;
         }
 
-        .result-value {
-            font-weight: 700;
-            color: var(--accent-blue);
-            font-size: 0.9rem;
-        }
-
-        .highlight-unit {
-            color: var(--highlight-orange);
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        .total-highlight {
-            color: var(--excel-header-bg);
-            font-size: 1.05rem;
-            font-weight: 800;
-        }
+        .result-value { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
+        .highlight-unit { color: var(--highlight-orange); font-size: 0.95rem; font-weight: 700; }
+        .total-highlight { color: var(--excel-header-bg); font-size: 1.05rem; font-weight: 800; }
 
         .footer-copyright {
             padding: 10px 15px;
@@ -278,23 +236,46 @@
         <div class="form-grid">
             <div class="form-group">
                 <label for="dnSelect">Đường kính ống (DN):</label>
-                <select id="dnSelect" onchange="onDNChange()">
-                </select>
+                <select id="dnSelect" onchange="onDNChange()"></select>
                 <div class="id-display-info" id="idDisplay">Đường kính trong (ID): - mm</div>
             </div>
             
             <div class="form-group">
-                <label for="length">Chiều dài đường ống (m):</label>
+                <label for="length">Chiều dài đường ống L (m):</label>
                 <input type="number" id="length" value="500" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
             </div>
+            
             <div class="form-group">
-                <label for="h_head">Áp lực nước điểm đầu (m):</label>
-                <input type="number" id="h_head" value="20" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
+                <label for="p_front">Áp lực nước trước van P<sub>trước</sub> (m):</label>
+                <input type="number" id="p_front" value="30" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
             </div>
+            
             <div class="form-group">
-                <label for="h_tail">Áp lực nước điểm cuối (m):</label>
+                <label for="h_tail">Áp lực tự do điểm cuối H<sub>cuối</sub> (m):</label>
                 <input type="number" id="h_tail" value="0" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
             </div>
+
+            <div class="form-group">
+                <label for="valve_type">Loại van thông rửa:</label>
+                <select id="valve_type" onchange="calculateFlushing()">
+                    <option value="gate" selected>Van Cổng (Gate Valve)</option>
+                    <option value="butterfly">Van Bướm (Butterfly Valve)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="valve_open">Độ mở van (%):</label>
+                <select id="valve_open" onchange="calculateFlushing()">
+                    <option value="100" selected>100% (Mở hết)</option>
+                    <option value="90">90%</option>
+                    <option value="80">80%</option>
+                    <option value="70">70%</option>
+                    <option value="60">60%</option>
+                    <option value="50">50%</option>
+                    <option value="40">40% (Giới hạn)</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="flush_time">Thời gian thông rửa (phút):</label>
                 <input type="number" id="flush_time" value="10" inputmode="decimal" onfocus="this.select()" onchange="calculateFlushing()">
@@ -307,10 +288,22 @@
 
         <button class="btn-calc" onclick="calculateFlushing()">Tính Toán Thông Rửa</button>
 
-        <div class="section-title">II. LƯỢNG NƯỚC THÔNG RỬA</div>
+        <div class="section-title">II. LƯỢNG NƯỚC THÔNG RỬA VÀ THỦY LỰC VAN</div>
         <div class="result-box">
             <div class="result-item">
-                <span class="result-label">Lượng nước thông rửa:</span>
+                <span class="result-label">Hệ số cục bộ van (K):</span>
+                <span class="result-value" id="res_k_val">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Vận tốc dòng chảy trong ống (v):</span>
+                <span class="result-value" id="res_v">- m/s</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Tổn thất áp lực qua van (h<sub>van</sub>):</span>
+                <span class="result-value" id="res_h_van">- m</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Lưu lượng xả thông rửa (Q):</span>
                 <div class="result-value-group">
                     <span id="res_q_m3s" class="highlight-unit">- m³/s</span>
                     <span id="res_q_m3p" class="highlight-unit">- m³/p</span>
@@ -338,6 +331,12 @@
 </div>
 
 <script>
+    // Bảng dữ liệu hệ số K qua Van Cổng và Van Bướm
+    const VALVE_K_DATA = {
+        gate: { "100": 0.15, "90": 0.25, "80": 0.35, "70": 0.70, "60": 1.25, "50": 2.50, "40": 6.00 },
+        butterfly: { "100": 0.45, "90": 0.80, "80": 1.25, "70": 2.50, "60": 5.20, "50": 10.00, "40": 21.00 }
+    };
+
     const PIPE_DB = {
         hdpe: {
             c: 140,
@@ -435,14 +434,21 @@
 
     function calculateFlushing() {
         const L = parseFloat(document.getElementById('length').value) || 0;
-        const hHead = parseFloat(document.getElementById('h_head').value) || 0;
+        const pFront = parseFloat(document.getElementById('p_front').value) || 0;
         const hTail = parseFloat(document.getElementById('h_tail').value) || 0;
         const flushTime = parseFloat(document.getElementById('flush_time').value) || 0;
         const flushCount = parseFloat(document.getElementById('flush_count').value) || 0;
+        
+        const valveType = document.getElementById('valve_type').value;
+        const valveOpen = document.getElementById('valve_open').value;
+        const K = VALVE_K_DATA[valveType][valveOpen] || 0.15;
 
-        const deltaH = hHead - hTail;
+        const deltaH_total = pFront - hTail;
 
-        if (currentID <= 0 || L <= 0 || deltaH <= 0) {
+        if (currentID <= 0 || L <= 0 || deltaH_total <= 0) {
+            document.getElementById('res_k_val').innerText = "-";
+            document.getElementById('res_v').innerText = "- m/s";
+            document.getElementById('res_h_van').innerText = "- m";
             document.getElementById('res_q_m3s').innerText = "- m³/s";
             document.getElementById('res_q_m3p').innerText = "- m³/p";
             document.getElementById('res_q_m3h').innerText = "Không hợp lệ";
@@ -451,17 +457,36 @@
             return;
         }
 
-        const idMeter = currentID / 1000;
+        const D = currentID / 1000; // m
+        const g = 9.81;
+        const A = (Math.PI * Math.pow(D, 2)) / 4;
 
-        const qM3s = 0.2785 * currentC * Math.pow(idMeter, 2.63) * Math.pow(deltaH / L, 0.54);
+        // Giải thuật lặp tìm vận tốc v và tổn thất qua van
+        let v = 1.0; 
+        let hVan = 0;
+        let hPipe = 0;
+
+        for (let i = 0; i < 20; i++) {
+            hVan = K * (Math.pow(v, 2) / (2 * g));
+            hPipe = deltaH_total - hVan;
+            if (hPipe <= 0) {
+                hPipe = 0.001;
+            }
+            let Q_iter = 0.2785 * currentC * Math.pow(D, 2.63) * Math.pow(hPipe / L, 0.54);
+            v = Q_iter / A;
+        }
+
+        const qM3s = v * A;
         const qM3p = qM3s * 60;
         const qM3h = qM3s * 3600;
 
-        const pipeVol = ((Math.PI * Math.pow(idMeter, 2)) / 4) * L * 0.70;
-
+        const pipeVol = A * L * 0.70;
         const flushVol = qM3h * (flushTime / 60) * flushCount;
         const totalVol = flushVol + pipeVol;
 
+        document.getElementById('res_k_val').innerText = K.toFixed(2);
+        document.getElementById('res_v').innerText = v.toFixed(2) + " m/s";
+        document.getElementById('res_h_van').innerText = hVan.toFixed(2) + " m";
         document.getElementById('res_q_m3s').innerText = qM3s.toFixed(4) + " m³/s";
         document.getElementById('res_q_m3p').innerText = qM3p.toFixed(2) + " m³/p";
         document.getElementById('res_q_m3h').innerText = qM3h.toFixed(2) + " m³/h";
